@@ -4,7 +4,7 @@ A LangChain-based research assistant specialized for clinical trial design.
 
 ## Changelog
 
--[ ] **v0.3**
+ - [x] **v0.3**
   - create tests for the project
   - create bootstrap.sh for the project
   - make sure all the listed tests are passed
