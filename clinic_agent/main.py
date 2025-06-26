@@ -4,9 +4,10 @@ from typing import Any
 
 import click
 from dotenv import load_dotenv
-from langchain.agents import AgentType, initialize_agent
+from langchain.agents import AgentExecutor, create_react_agent
 from langchain.chat_models import ChatOpenAI
 from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_core.prompts import PromptTemplate
 from pypdf import PdfReader
 
 try:  # openai is an optional dependency of langchain-openai
@@ -22,9 +23,11 @@ def create_agent() -> Any:
         os.environ["REQUESTS_CA_BUNDLE"] = ""
         if openai is not None:  # pragma: no cover - openai optional
             openai.verify_ssl_certs = False  # type: ignore[attr-defined]
+
     model = os.getenv("OPENAI_MODEL")
     api_base = os.getenv("OPENAI_API_BASE")
     proxy = os.getenv("HTTPS_PROXY")
+
     llm_kwargs: dict[str, Any] = {"temperature": 0}
     if model:
         llm_kwargs["model"] = model
@@ -32,15 +35,31 @@ def create_agent() -> Any:
         llm_kwargs["base_url"] = api_base
     if proxy:
         llm_kwargs["proxy"] = proxy
+
     llm = ChatOpenAI(**llm_kwargs)
     search_tool = TavilySearchResults(max_results=5)
     tools = [search_tool]
-    return initialize_agent(
-        tools,
-        llm,
-        agent=AgentType.REACT_DOCSTORE,
-        verbose=True,
+
+    prompt_path = Path(__file__).parent / "prompt" / "clinic_agent.md"
+    template = (
+        prompt_path.read_text(encoding="utf-8")
+        + "\n\nYou have access to the following tools:\n{tools}\n\n"
+        + "Use the following format:\n"
+        + "Question: the input question you must answer\n"
+        + "Thought: you should always think about what to do\n"
+        + "Action: the action to take, should be one of [{tool_names}]\n"
+        + "Action Input: the input to the action\n"
+        + "Observation: the result of the action\n"
+        + "... (this Thought/Action/Action Input/Observation can repeat N times)\n"
+        + "Thought: I now know the final answer\n"
+        + "Final Answer: the final answer to the original input question\n\n"
+        + "Begin!\n\n"
+        + "Question: {input}\n"
+        + "Thought:{agent_scratchpad}"
     )
+    prompt = PromptTemplate.from_template(template)
+    agent = create_react_agent(llm, tools, prompt)
+    return AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 
 def pdf_to_markdown(pdf_path: str) -> str:
