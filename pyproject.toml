@@ -2,7 +2,7 @@
 name = "clinic_agent"
 version = "0.2.0"
 description = "A langchain based clinic research agent"
-authors = ["Roo"]
+authors = [ { name = "Downsea", email = "qiaonancn@gmail.com" }]
 requires-python = ">=3.11"
 dependencies = [
     "click",
