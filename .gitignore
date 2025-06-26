@@ -1,2 +1,11 @@
 example/CHAD_Full.pdf
 example/CHAD_full.md
+.env
+clinic_agent.egg-info
+build
+*\__pycache__
+.pytest_cache
+uv.lock
+example/US11826325.md
+uv.lock
+example\CHAD_Full.md

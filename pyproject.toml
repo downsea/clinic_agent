@@ -1,16 +1,19 @@
 [project]
 name = "clinic_agent"
-version = "0.1.0"
+version = "0.3.0"
 description = "A langchain based clinic research agent"
-authors = ["Roo"]
+authors = [ { name = "Downsea", email = "qiaonancn@gmail.com" }]
 requires-python = ">=3.11"
 dependencies = [
     "click",
-    "tavily-python",
+    "langchain-tavily",
     "langchain",
+    "langchain_community",
     "langchain-openai",
     "python-dotenv",
-    "uv"
+    "PyMuPDF",
+    "uv",
+    "pytest"
 ]
 
 [project.scripts]
