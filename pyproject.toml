@@ -1,0 +1,17 @@
+[project]
+name = "clinic_agent"
+version = "0.1.0"
+description = "A langchain based clinic research agent"
+authors = ["Roo"]
+requires-python = ">=3.11"
+dependencies = [
+    "click",
+    "tavily-python",
+    "langchain",
+    "langchain-openai",
+    "python-dotenv",
+    "uv"
+]
+
+[project.scripts]
+clinic_agent = "clinic_agent.main:cli"
