@@ -43,15 +43,11 @@ A LangChain-based research assistant specialized for clinical trial design.
 5. Run the agent with a question:
    - test 1
    ```bash
-   clinic_agent "Design a Phase 3, Randomized, Double-blind, Placebo Controlled, Multicenter Trial to Evaluate the Safety and Efficacy of BMS-298585 in Combination With Glyburide Therapy in Subjects With Type 2 Diabetes Who Have Inadequate Glycemic Control on Sulfonylurea Therapy Alone"
+   python clinic_agent/main.py -f example/CHAD_full_head.md -o report.md --lang cn
    ```
    - test 2
-   ```bash
-   python clinic_agent/main.py < example/CHAD_full.md
-   ```
-   - test 3
    Or process a PDF directly:
    ```bash
-   clinic_agent --pdf example/US11826325.pdf
+   clinic_agent --pdf example/CHAD_Full.pdf -o report.md --lang cn
    ```
    Without an argument the command enters an interactive session. Type `exit` to quit.
